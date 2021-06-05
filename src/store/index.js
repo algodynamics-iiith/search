@@ -1,4 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import logger from "redux-logger";
+
 import binarySearch from "./slices/binarySearch";
 import linearSearch from "./slices/linearSearch";
 import randomSearchWithoutReplacement from "./slices/randomSearchWithoutReplacement";
@@ -13,4 +15,5 @@ export default configureStore({
     linearSearch,
     binarySearch,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

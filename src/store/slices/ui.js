@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const slice = createSlice({
   name: "ui",
   initialState: {
-    showSubmitModal: true,
+    showSubmitModal: false,
   },
   reducers: {
     setShowSubmitModal: (state, action) => {

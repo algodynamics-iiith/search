@@ -33,11 +33,15 @@ const SubmitAnswer = (props) => {
           value={radioValue}
           onChange={(e) => setRadioValue(e.target.value)}
         >
-          <FormControlLabel value="found" control={<Radio />} label="Found" />
+          <FormControlLabel
+            value="found"
+            control={<Radio />}
+            label="Search target found"
+          />
           <FormControlLabel
             value="notFound"
             control={<Radio />}
-            label="Not Found"
+            label="Search target not found"
           />
         </RadioGroup>
         {radioValue === "found" && (
@@ -45,7 +49,7 @@ const SubmitAnswer = (props) => {
             autoFocus
             margin="dense"
             id="name"
-            label="Index of element"
+            label="Index of search target"
             type="email"
             fullWidth
           />
