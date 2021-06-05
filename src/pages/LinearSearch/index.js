@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   },
 });
 
-const RandomSearchWithReplacement = () => {
+const LinearSearch = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.root}>
@@ -23,4 +23,4 @@ const RandomSearchWithReplacement = () => {
   );
 };
 
-export default RandomSearchWithReplacement;
+export default LinearSearch;

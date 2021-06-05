@@ -1,9 +1,9 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import clsx from "clsx";
 
-import { actions } from "../../store/slices/randomSearchWithoutReplacement";
+import { actions } from "../../store/slices/linearSearch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,14 +76,21 @@ const useStyles = makeStyles((theme) => ({
   index: {
     padding: "10px",
   },
+  increment: {
+    backgroundColor: "rgb(144, 202, 249)",
+  },
 }));
 
 const Experiment = (props) => {
   const classes = useStyles();
   const experiment = props.experiment;
 
-  const handleSelect = (index) => {
-    props.select(index);
+  const found =
+    experiment.activeIndex >= 0 &&
+    experiment.list[experiment.activeIndex] === experiment.target;
+
+  const handleNext = () => {
+    props.next();
   };
 
   return (
@@ -104,13 +111,13 @@ const Experiment = (props) => {
       <Grid item container>
         <div className={classes.list}>
           {experiment.list.map((number, index) => (
-            <div className={classes.node} onClick={() => handleSelect(index)}>
+            <div className={classes.node}>
               <div
                 className={clsx(
                   classes.numberContainer,
-                  experiment.activeIndices.includes(index) &&
+                  index <= experiment.activeIndex &&
                     classes.activeNumberContainer,
-                  experiment.activeIndices.includes(index) &&
+                  index <= experiment.activeIndex &&
                     number === experiment.target &&
                     classes.targetNumberContainer
                 )}
@@ -118,8 +125,7 @@ const Experiment = (props) => {
                 <span
                   className={clsx(
                     classes.number,
-                    experiment.activeIndices.includes(index) &&
-                      classes.activeNumber
+                    index <= experiment.activeIndex && classes.activeNumber
                   )}
                 >
                   {number}
@@ -128,7 +134,7 @@ const Experiment = (props) => {
               <div
                 className={clsx(
                   classes.indexContainer,
-                  experiment.activeIndices.includes(index) &&
+                  index <= experiment.activeIndex &&
                     classes.activeIndexContainer
                 )}
               >
@@ -137,6 +143,25 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
+        <Grid container alignItems="center" spacing={3}>
+          <Grid item>
+            <Button
+              className={classes.increment}
+              variant="contained"
+              onClick={handleNext}
+              disabled={
+                experiment.activeIndex === experiment.list.length - 1 || found
+              }
+            >
+              Increment
+            </Button>
+          </Grid>
+          <Grid item>
+            {found
+              ? "Target element already found, no need to iterate more"
+              : "Click Increment to scan next item."}
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -144,12 +169,12 @@ const Experiment = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    experiment: state.randomSearchWithoutReplacement,
+    experiment: state.linearSearch,
   };
 };
 
 const mapDispatchToProps = {
-  select: actions.select,
+  next: actions.next,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Experiment);
