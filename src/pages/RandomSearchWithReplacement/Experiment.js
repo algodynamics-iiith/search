@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     padding: "15px 0",
     width: "200px",
+    fontSize: "20px",
     backgroundColor: "rgb(213, 250, 252)",
   },
   list: {
