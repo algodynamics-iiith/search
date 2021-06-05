@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import clsx from "clsx";
 
 import { actions } from "../../store/slices/randomSearchWithReplacement";
+import { actions as uiActions } from "../../store/slices/ui";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,7 +110,11 @@ const Experiment = (props) => {
       <Grid item container>
         <div className={classes.list}>
           {experiment.list.map((number, index) => (
-            <div className={classes.node} onClick={() => handleSelect(index)}>
+            <div
+              key={index}
+              className={classes.node}
+              onClick={() => handleSelect(index)}
+            >
               <div
                 className={clsx(
                   classes.numberContainer,
@@ -144,7 +149,11 @@ const Experiment = (props) => {
         <Grid container>
           <Grid item container spacing={2} direction="row-reverse">
             <Grid item>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={props.showSubmitModal}
+              >
                 Submit Answer
               </Button>
             </Grid>
@@ -166,9 +175,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = {
-  select: actions.select,
-  reset: actions.reset,
+const mapDispatchToProps = (dispatch) => {
+  return {
+    select: (index) => dispatch(actions.select(index)),
+    reset: () => dispatch(actions.reset()),
+    showSubmitModal: () => dispatch(uiActions.setShowSubmitModal(true)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Experiment);

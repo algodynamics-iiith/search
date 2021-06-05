@@ -113,7 +113,7 @@ const Experiment = (props) => {
       <Grid item container>
         <div className={classes.list}>
           {experiment.list.map((number, index) => (
-            <div className={classes.node}>
+            <div key={index} className={classes.node}>
               <div
                 className={clsx(
                   classes.numberContainer,
@@ -184,9 +184,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = {
-  next: actions.next,
-  reset: actions.reset,
+const mapDispatchToProps = (dispatch) => {
+  return {
+    next: (index) => dispatch(actions.next(index)),
+    reset: () => dispatch(actions.reset()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Experiment);
