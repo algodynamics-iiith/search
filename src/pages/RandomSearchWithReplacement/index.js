@@ -1,5 +1,5 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import Experiment from "./Experiment";
 import Instructions from "./Instructions";
 

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as utils from "../../utils";
 
-const data = utils.generateRandomListAndTarget();
+let data = utils.generateRandomListAndTarget();
 
 const slice = createSlice({
   name: "randomSearchWithoutReplacement",

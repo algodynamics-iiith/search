@@ -1,5 +1,5 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import clsx from "clsx";
 
@@ -93,6 +93,10 @@ const Experiment = (props) => {
     experiment.list.indexOf(experiment.target)
   );
 
+  useEffect(() => {
+    props.reset();
+  }, []);
+
   const handleSelect = (index) => {
     props.select(index);
   };
@@ -183,6 +187,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   select: actions.select,
   showAll: actions.showAll,
+  reset: actions.reset,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Experiment);

@@ -61,6 +61,7 @@ const slice = createSlice({
     },
     reset: (state, action) => {
       state.activeIndices = [];
+      state.blockedIndices = [];
       state.message = `You need to search for the number ${state.target} in the given list of numbers`;
     },
   },
