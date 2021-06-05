@@ -77,9 +77,6 @@ const useStyles = makeStyles((theme) => ({
   index: {
     padding: "10px",
   },
-  increment: {
-    backgroundColor: "rgb(144, 202, 249)",
-  },
 }));
 
 const Experiment = (props) => {
@@ -148,23 +145,32 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
-        <Grid container alignItems="center" spacing={3}>
-          <Grid item>
-            <Button
-              className={classes.increment}
-              variant="contained"
-              onClick={handleNext}
-              disabled={
-                experiment.activeIndex === experiment.list.length - 1 || found
-              }
-            >
-              Increment
-            </Button>
+        <Grid container>
+          <Grid item xs={6} container alignItems="center" spacing={3}>
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleNext}
+                disabled={
+                  experiment.activeIndex === experiment.list.length - 1 || found
+                }
+              >
+                Increment
+              </Button>
+            </Grid>
+            <Grid item>
+              {found
+                ? "Target element already found, no need to iterate more"
+                : "Click Increment to scan next item."}
+            </Grid>
           </Grid>
-          <Grid item>
-            {found
-              ? "Target element already found, no need to iterate more"
-              : "Click Increment to scan next item."}
+          <Grid item xs={6} container spacing={2} direction="row-reverse">
+            <Grid item>
+              <Button variant="contained" onClick={props.reset}>
+                Reset
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

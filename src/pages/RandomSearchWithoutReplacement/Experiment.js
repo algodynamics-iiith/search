@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -142,6 +142,20 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
+        <Grid container>
+          <Grid item container spacing={2} direction="row-reverse">
+            <Grid item>
+              <Button variant="contained" color="primary">
+                Submit Answer
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={props.reset}>
+                Reset
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

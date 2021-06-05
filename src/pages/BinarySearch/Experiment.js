@@ -80,9 +80,6 @@ const useStyles = makeStyles((theme) => ({
   index: {
     padding: "10px",
   },
-  showAll: {
-    backgroundColor: "rgb(144, 202, 249)",
-  },
 }));
 
 const Experiment = (props) => {
@@ -158,19 +155,33 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
-        <Grid container alignItems="center" spacing={3}>
-          <Grid item>
-            <Button
-              className={classes.showAll}
-              variant="contained"
-              onClick={handleShowAll}
-              disabled={!found}
-            >
-              Show All
-            </Button>
+        <Grid container>
+          <Grid item xs={6} container alignItems="center" spacing={3}>
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleShowAll}
+                disabled={!found}
+              >
+                Show All
+              </Button>
+            </Grid>
+            <Grid item>
+              {found ? "Target found, See all hidden numbers to verify." : ""}
+            </Grid>
           </Grid>
-          <Grid item>
-            {found ? "Target found, See all hidden numbers to verify." : ""}
+          <Grid item xs={6} container spacing={2} direction="row-reverse">
+            <Grid item>
+              <Button variant="contained" color="primary">
+                Submit Answer
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" onClick={props.reset}>
+                Reset
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
