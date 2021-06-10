@@ -1,4 +1,5 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -13,7 +14,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     height: "100%",
   },
-  message: {},
+  message: {
+    margin: "0 auto",
+    width: "70%",
+    fontSize: "20px",
+  },
   targetBox: {
     margin: "0 auto",
     padding: "15px 0",
@@ -100,7 +105,14 @@ const Experiment = (props) => {
       justify="space-between"
     >
       <Grid item>
-        <div className={classes.message}>{experiment.message}</div>
+        <Alert
+          className={classes.message}
+          variant="filled"
+          severity="warning"
+          icon={<></>}
+        >
+          {experiment.message}
+        </Alert>
       </Grid>
       <Grid item>
         <div className={classes.targetBox}>
