@@ -1,18 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as utils from "../../utils";
 
-const data = utils.generateRandomListAndTarget(5);
-
 const slice = createSlice({
   name: "binarySearch",
   initialState: {
-    list: data[0].sort((a, b) => a - b),
-    target: data[1],
+    list: [],
+    target: 0,
     activeIndices: [],
     blockedIndices: [],
-    message: `You need to search for the number ${data[1]} in the given list of numbers`,
+    message: "",
   },
   reducers: {
+    init: (state, action) => {
+      const { list, target } = action.payload;
+      state.list = list;
+      state.target = target;
+      state.message = `You need to search for the number ${state.target} in the given list of numbers`;
+    },
     select: (state, action) => {
       const index = action.payload;
       if (

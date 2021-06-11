@@ -1,17 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as utils from "../../utils";
-
-let data = utils.generateRandomListAndTarget();
 
 const slice = createSlice({
   name: "randomSearchWithoutReplacement",
   initialState: {
-    list: data[0],
-    target: data[1],
+    list: [],
+    target: 0,
     activeIndices: [],
-    message: `You need to search for the number ${data[1]} in the given list of numbers`,
+    message: "",
   },
   reducers: {
+    init: (state, action) => {
+      const { list, target } = action.payload;
+      state.list = list;
+      state.target = target;
+      state.message = `You need to search for the number ${state.target} in the given list of numbers`;
+    },
     select: (state, action) => {
       const index = action.payload;
       if (state.activeIndices.includes(index)) {

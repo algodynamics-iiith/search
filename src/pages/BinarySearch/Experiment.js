@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 import { actions } from "../../store/slices/binarySearch";
 import { actions as uiActions } from "../../store/slices/ui";
+import * as utils from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,7 +98,11 @@ const Experiment = (props) => {
   );
 
   useEffect(() => {
-    props.reset();
+    const data = utils.generateRandomListAndTarget(5);
+    props.init({
+      list: data[0].sort((a, b) => a - b),
+      target: data[1],
+    });
   }, []);
 
   const handleSelect = (index) => {
@@ -218,6 +223,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    init: (payload) => dispatch(actions.init(payload)),
     select: (index) => dispatch(actions.select(index)),
     showAll: () => dispatch(actions.showAll()),
     reset: () => dispatch(actions.reset()),

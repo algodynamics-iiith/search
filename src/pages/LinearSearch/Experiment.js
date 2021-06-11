@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import clsx from "clsx";
 
 import { actions } from "../../store/slices/linearSearch";
+import * as utils from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,7 +94,11 @@ const Experiment = (props) => {
     experiment.list[experiment.activeIndex] === experiment.target;
 
   useEffect(() => {
-    props.reset();
+    const data = utils.generateRandomListAndTarget();
+    props.init({
+      list: data[0],
+      target: data[1],
+    });
   }, []);
 
   const handleNext = () => {
@@ -198,6 +203,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    init: (payload) => dispatch(actions.init(payload)),
     next: (index) => dispatch(actions.next(index)),
     reset: () => dispatch(actions.reset()),
   };
