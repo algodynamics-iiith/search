@@ -1,7 +1,7 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 
 import { actions } from "../../store/slices/linearSearch";
@@ -85,9 +85,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Experiment = (props) => {
+const Experiment = () => {
   const classes = useStyles();
-  const experiment = props.experiment;
+  const dispatch = useDispatch();
+  const experimentKey = useSelector((state) => state.ui.selectedTab);
+  const experiment = useSelector((state) => state[experimentKey]);
 
   const found =
     experiment.activeIndex >= 0 &&
@@ -95,14 +97,20 @@ const Experiment = (props) => {
 
   useEffect(() => {
     const data = utils.generateRandomListAndTarget();
-    props.init({
-      list: data[0],
-      target: data[1],
-    });
+    dispatch(
+      actions.init({
+        list: data[0],
+        target: data[1],
+      })
+    );
   }, []);
 
   const handleNext = () => {
-    props.next();
+    dispatch(actions.next());
+  };
+
+  const handleReset = () => {
+    dispatch(actions.reset());
   };
 
   return (
@@ -184,7 +192,7 @@ const Experiment = (props) => {
           </Grid>
           <Grid item xs={6} container spacing={2} direction="row-reverse">
             <Grid item>
-              <Button variant="contained" onClick={props.reset}>
+              <Button variant="contained" onClick={handleReset}>
                 Reset
               </Button>
             </Grid>
@@ -195,18 +203,4 @@ const Experiment = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    experiment: state.linearSearch,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    init: (payload) => dispatch(actions.init(payload)),
-    next: (index) => dispatch(actions.next(index)),
-    reset: () => dispatch(actions.reset()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Experiment);
+export default Experiment;

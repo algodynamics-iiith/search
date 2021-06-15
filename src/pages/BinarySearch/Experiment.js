@@ -1,8 +1,10 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
+import * as api from "../../api";
+import { actionLog } from "../../store/middleware/analytics";
 
 import { actions } from "../../store/slices/binarySearch";
 import { actions as uiActions } from "../../store/slices/ui";
@@ -89,9 +91,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Experiment = (props) => {
+const Experiment = () => {
   const classes = useStyles();
-  const experiment = props.experiment;
+  const dispatch = useDispatch();
+  const experimentKey = useSelector((state) => state.ui.selectedTab);
+  const experiment = useSelector((state) => state[experimentKey]);
 
   const found = experiment.activeIndices.includes(
     experiment.list.indexOf(experiment.target)
@@ -99,18 +103,32 @@ const Experiment = (props) => {
 
   useEffect(() => {
     const data = utils.generateRandomListAndTarget(5);
-    props.init({
-      list: data[0].sort((a, b) => a - b),
-      target: data[1],
-    });
+    dispatch(
+      actions.init({
+        list: data[0].sort((a, b) => a - b),
+        target: data[1],
+      })
+    );
   }, []);
 
   const handleSelect = (index) => {
-    props.select(index);
+    dispatch(actions.select(index));
   };
 
   const handleShowAll = () => {
-    props.showAll();
+    dispatch(actions.showAll());
+  };
+
+  const handleAnalytics = () => {
+    dispatch(uiActions.setShowAnalyticsModal(true));
+  };
+
+  const handleReset = () => {
+    dispatch(actions.reset());
+  };
+
+  const handleSubmit = async () => {
+    await api.submit(experimentKey, actionLog);
   };
 
   return (
@@ -177,8 +195,13 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
-        <Grid container>
-          <Grid item xs={6} container alignItems="center" spacing={3}>
+        <Grid container justify="space-between">
+          <Grid item md={9} spacing={2} container alignItems="center">
+            <Grid item>
+              <Button variant="contained" onClick={handleAnalytics}>
+                Analytics
+              </Button>
+            </Grid>
             <Grid item>
               <Button
                 color="primary"
@@ -193,18 +216,18 @@ const Experiment = (props) => {
               {found ? "Target found, See all hidden numbers to verify." : ""}
             </Grid>
           </Grid>
-          <Grid item xs={6} container spacing={2} direction="row-reverse">
+          <Grid item md={3} container spacing={2} direction="row-reverse">
             <Grid item>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={props.showSubmitModal}
+                onClick={handleSubmit}
               >
-                Submit Answer
+                Submit
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" onClick={props.reset}>
+              <Button variant="contained" onClick={handleReset}>
                 Reset
               </Button>
             </Grid>
@@ -215,20 +238,4 @@ const Experiment = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    experiment: state.binarySearch,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    init: (payload) => dispatch(actions.init(payload)),
-    select: (index) => dispatch(actions.select(index)),
-    showAll: () => dispatch(actions.showAll()),
-    reset: () => dispatch(actions.reset()),
-    showSubmitModal: () => dispatch(uiActions.setShowSubmitModal(true)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Experiment);
+export default Experiment;

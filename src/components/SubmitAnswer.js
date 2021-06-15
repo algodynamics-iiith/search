@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
-  FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -12,9 +11,13 @@ import {
   DialogTitle,
   TextField,
 } from "@material-ui/core";
+
+import * as api from "../api";
 import { actions as uiActions } from "../store/slices/ui";
+import { actionLog } from "../store/middleware/analytics";
 
 const SubmitAnswer = (props) => {
+  const experimentKey = useSelector((state) => state.ui.selectedTab);
   const [radioValue, setRadioValue] = useState("");
 
   useEffect(() => {
@@ -23,6 +26,11 @@ const SubmitAnswer = (props) => {
 
   const handleClose = () => {
     props.hide();
+  };
+
+  const handleSubmit = async () => {
+    await api.submit(experimentKey, actionLog);
+    handleClose();
   };
 
   return (
@@ -59,7 +67,7 @@ const SubmitAnswer = (props) => {
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleSubmit} color="primary">
           Submit
         </Button>
       </DialogActions>

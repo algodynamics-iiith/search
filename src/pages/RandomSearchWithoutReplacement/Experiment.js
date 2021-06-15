@@ -1,8 +1,10 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
+import * as api from "../../api";
+import { actionLog } from "../../store/middleware/analytics";
 
 import { actions } from "../../store/slices/randomSearchWithoutReplacement";
 import { actions as uiActions } from "../../store/slices/ui";
@@ -86,20 +88,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Experiment = (props) => {
+const Experiment = () => {
   const classes = useStyles();
-  const experiment = props.experiment;
+  const dispatch = useDispatch();
+  const experimentKey = useSelector((state) => state.ui.selectedTab);
+  const experiment = useSelector((state) => state[experimentKey]);
 
   useEffect(() => {
     const data = utils.generateRandomListAndTarget();
-    props.init({
-      list: data[0],
-      target: data[1],
-    });
+    dispatch(
+      actions.init({
+        list: data[0],
+        target: data[1],
+      })
+    );
   }, []);
 
   const handleSelect = (index) => {
-    props.select(index);
+    dispatch(actions.select(index));
+  };
+
+  const handleAnalytics = () => {
+    dispatch(uiActions.setShowAnalyticsModal(true));
+  };
+
+  const handleReset = () => {
+    dispatch(actions.reset());
+  };
+
+  const handleSubmit = async () => {
+    await api.submit(experimentKey, actionLog);
   };
 
   return (
@@ -164,19 +182,24 @@ const Experiment = (props) => {
             </div>
           ))}
         </div>
-        <Grid container>
-          <Grid item container spacing={2} direction="row-reverse">
+        <Grid container justify="space-between">
+          <Grid item>
+            <Button variant="contained" onClick={handleAnalytics}>
+              Analytics
+            </Button>
+          </Grid>
+          <Grid item md={6} container spacing={2} direction="row-reverse">
             <Grid item>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={props.showSubmitModal}
+                onClick={handleSubmit}
               >
-                Submit Answer
+                Submit
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" onClick={props.reset}>
+              <Button variant="contained" onClick={handleReset}>
                 Reset
               </Button>
             </Grid>
@@ -187,19 +210,4 @@ const Experiment = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    experiment: state.randomSearchWithoutReplacement,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    init: (payload) => dispatch(actions.init(payload)),
-    select: (index) => dispatch(actions.select(index)),
-    reset: () => dispatch(actions.reset()),
-    showSubmitModal: () => dispatch(uiActions.setShowSubmitModal(true)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Experiment);
+export default Experiment;

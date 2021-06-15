@@ -6,6 +6,7 @@ import linearSearch from "./slices/linearSearch";
 import randomSearchWithoutReplacement from "./slices/randomSearchWithoutReplacement";
 import randomSearchWithReplacement from "./slices/randomSearchWithReplacement";
 import ui from "./slices/ui";
+import { analyticsLogger } from "./middleware/analytics";
 
 export default configureStore({
   reducer: {
@@ -15,5 +16,6 @@ export default configureStore({
     linearSearch,
     binarySearch,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(analyticsLogger),
 });

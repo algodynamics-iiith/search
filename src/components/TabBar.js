@@ -1,12 +1,14 @@
 import React from "react";
 import { AppBar, Tab, makeStyles } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import { useDispatch, useSelector } from "react-redux";
 
 import BinarySearch from "../pages/BinarySearch";
 import Home from "../pages/Home";
 import LinearSearch from "../pages/LinearSearch";
 import RandomSearchWithoutReplacement from "../pages/RandomSearchWithoutReplacement";
 import RandomSearchWithReplacement from "../pages/RandomSearchWithReplacement";
+import { actions as uiActions } from "../store/slices/ui";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,45 +29,59 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TabBar() {
   const classes = useStyles();
-  const [value, setValue] = React.useState("1");
+  const dispatch = useDispatch();
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const selectedTab = useSelector((state) => state.ui.selectedTab);
+
+  const setSelectedTab = (event, newValue) => {
+    dispatch(
+      uiActions.setSelectedTab({
+        tabKey: newValue,
+      })
+    );
   };
 
   return (
-    <TabContext value={value}>
+    <TabContext value={selectedTab}>
       <AppBar position="relative" color="secondary">
-        <TabList onChange={handleChange}>
-          <Tab className={classes.tab} label="Home" value="0" />
+        <TabList onChange={setSelectedTab}>
+          <Tab className={classes.tab} label="Home" value="home" />
           <Tab
             className={classes.tab}
             label="Random Search With Replacement"
-            value="1"
+            value="randomSearchWithReplacement"
           />
           <Tab
             className={classes.tab}
             label="Random Search Without Replacement"
-            value="2"
+            value="randomSearchWithoutReplacement"
           />
-          <Tab className={classes.tab} label="Linear Search" value="3" />
-          <Tab className={classes.tab} label="Binary Search" value="4" />
+          <Tab
+            className={classes.tab}
+            label="Linear Search"
+            value="linearSearch"
+          />
+          <Tab
+            className={classes.tab}
+            label="Binary Search"
+            value="binarySearch"
+          />
         </TabList>
       </AppBar>
       <div className={classes.tabContainer}>
-        <TabPanel value="0">
+        <TabPanel value="home">
           <Home />
         </TabPanel>
-        <TabPanel value="1">
+        <TabPanel value="randomSearchWithReplacement">
           <RandomSearchWithReplacement />
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel value="randomSearchWithoutReplacement">
           <RandomSearchWithoutReplacement />
         </TabPanel>
-        <TabPanel value="3">
+        <TabPanel value="linearSearch">
           <LinearSearch />
         </TabPanel>
-        <TabPanel value="4">
+        <TabPanel value="binarySearch">
           <BinarySearch />
         </TabPanel>
       </div>
