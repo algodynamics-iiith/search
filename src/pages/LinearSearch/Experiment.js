@@ -103,7 +103,7 @@ const Experiment = () => {
         target: data[1],
       })
     );
-  }, []);
+  }, [experimentKey]);
 
   const handleNext = () => {
     dispatch(actions.next());

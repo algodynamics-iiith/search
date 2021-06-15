@@ -13,6 +13,7 @@ const slice = createSlice({
       const { list, target } = action.payload;
       state.list = list;
       state.target = target;
+      state.activeIndices = [];
       state.message = `You need to search for the number ${state.target} in the given list of numbers`;
     },
     select: (state, action) => {

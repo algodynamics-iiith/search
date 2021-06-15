@@ -109,7 +109,7 @@ const Experiment = () => {
         target: data[1],
       })
     );
-  }, []);
+  }, [experimentKey]);
 
   const handleSelect = (index) => {
     dispatch(actions.select(index));
